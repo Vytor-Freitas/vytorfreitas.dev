@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vytor Freitas | Dev & Fighter</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts: Oswald (Estilo Luta/Poster) e JetBrains Mono (Código) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@300;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons: FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fight-red': '#DC2626',
+                        'fight-dark': '#0f0f0f',
+                        'fight-gray': '#1a1a1a',
+                        'tech-accent': '#00ff41'
+                    },
+                    fontFamily: {
+                        'poster': ['Oswald', 'sans-serif'],
+                        'code': ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-in': 'slideIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #DC2626;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
+            border-color: #DC2626;
+        }
+
+        .rope-divider {
+            background-image: repeating-linear-gradient(45deg, #DC2626 0, #DC2626 10px, #0f0f0f 10px, #0f0f0f 20px);
+            height: 8px;
+            width: 100%;
+        }
+
+        /* Garantir alinhamento limpo nas tabelas de stats */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="font-poster">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-fight-dark/95 border-b border-fight-red/30 backdrop-blur">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tighter text-white">
+                VF<span class="text-fight-red">.DEV</span>
+            </div>
+            <div class="hidden md:flex space-x-8 font-code text-sm">
+                <a href="#about" class="hover:text-fight-red transition-colors">TALE OF THE TAPE</a>
+                <a href="#skills" class="hover:text-fight-red transition-colors">STATS</a>
+                <a href="#experience" class="hover:text-fight-red transition-colors">FIGHT HISTORY</a>
+                <a href="#contact" class="hover:text-fight-red transition-colors">CONTATO</a>
+            </div>
+            <button class="md:hidden text-white hover:text-fight-red" onclick="toggleMenu()">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-fight-gray border-b border-fight-red/50">
+            <a href="#about" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">QUEM SOU</a>
+            <a href="#skills" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">HABILIDADES</a>
+            <a href="#experience" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">EXPERIÊNCIA</a>
+            <a href="#contact" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">CONTATO</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[url('https://unsplash.com/pt-br/fotografias/uma-parede-branca-com-alguns-pontos-pretos-GEc9p9avZP8')] bg-cover bg-center opacity-20">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-fight-dark via-fight-dark/80 to-transparent"></div>
+
+        <div class="relative z-10 text-center px-4">
+            <div
+                class="mb-4 inline-block border border-fight-red px-4 py-1 rounded-full bg-fight-red/10 animate-pulse-fast">
+                <span class="text-fight-red font-code text-xs md:text-sm tracking-widest uppercase">Disponível para
+                    Projetos</span>
+            </div>
+            <h1
+                class="text-5xl md:text-8xl font-bold uppercase tracking-tighter mb-4 text-white drop-shadow-lg text-center">
+                Vytor <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-fight-red to-red-800">Freitas</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 font-light mb-8 max-w-2xl mx-auto">
+                <i class="fas fa-code text-fight-red mr-2"></i> Estudante de Engenharia de Software
+                <span class="mx-3 text-fight-red">|</span>
+                <i class="fas fa-fist-raised text-fight-red mr-2"></i> Lutador & Eng. de Softwware
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="#contact"
+                    class="bg-fight-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded transition-all transform hover:scale-105">
+                    DESAFIAR (CONTATO)
+                </a>
+                <a href="#experience"
+                    class="border border-white hover:border-fight-red hover:text-fight-red text-white font-bold py-3 px-8 rounded transition-all">
+                    VER CURRÍCULO
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="rope-divider"></div>
+
+    <!-- About Section (Tale of the Tape) -->
+    <section id="about" class="py-20 bg-fight-gray">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 uppercase text-white">
+                <span class="border-b-4 border-fight-red pb-2">Tale of the Tape</span>
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
+                <!-- Profile Area -->
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-red-600 to-fight-dark rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000">
+                    </div>
+                    <div
+                        class="relative bg-fight-dark border border-gray-800 p-8 rounded-lg text-center h-full flex flex-col justify-center items-center">
+
+                        <img class="rounded-full mb-6" src="Perfil.png" />
+                        <h3 class="text-2xl font-bold text-white mb-2">Vytor Hugo B. P. de Freitas</h3>
+                        <p class="text-gray-400 font-code text-sm">Governador Valadares, MG</p>
+                    </div>
+                </div>
+
+                <!-- Stats com Alinhamento Corrigido -->
+                <div class="space-y-6">
+                    <div class="stat-row">
+                        <span class="text-gray-400 font-code uppercase text-sm shrink-0">Classe</span>
+                        <span class="text-white text-lg md:text-xl font-bold text-right leading-tight">Desenvolvedor
+                            Back-End / Fullstack</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="text-gray-400 font-code uppercase text-sm shrink-0">Status</span>
+                        <span class="text-white text-lg md:text-xl font-bold text-right">AWS Cloud Trainee</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="text-gray-400 font-code uppercase text-sm shrink-0">Graduação</span>
+                        <span class="text-white text-lg md:text-xl font-bold text-right">Eng. de Software
+                            (Estácio)</span>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="text-fight-red font-bold mb-4 uppercase tracking-widest">Sobre o Atleta</h4>
+                        <p class="text-gray-300 leading-relaxed font-sans">
+                            Profissional proativo e autodidata, unindo a disciplina das artes marciais com a lógica da
+                            programação. Atualmente cursando Engenharia de Software e aprofundando conhecimentos em
+                            Cloud Computing através do programa AWS RE/START. Possuo experiência sólida em projetos de
+                            redes de fibra óptica (FTTH), e busco oportunidades para aplicar minha determinação e rápida
+                            capacidade de aprendizado no desenvolvimento de software.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mt-4 font-code text-xs">
+                        <span
+                            class="px-3 py-1 bg-gray-800 text-fight-red border border-fight-red/30 rounded">#Proativo</span>
+                        <span
+                            class="px-3 py-1 bg-gray-800 text-fight-red border border-fight-red/30 rounded">#TrabalhoEmEquipe</span>
+                        <span
+                            class="px-3 py-1 bg-gray-800 text-fight-red border border-fight-red/30 rounded">#Autonomia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-fight-dark relative">
+
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 uppercase text-white">
+                <span class="text-fight-red">///</span> Atributos de Combate
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-white"><i class="fas fa-network-wired mr-2 text-fight-red"></i>
+                            Redes / FTTH</span>
+                        <span class="text-fight-red font-code">Exp. Profissional</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2.5">
+                        <div class="bg-fight-red h-2.5 rounded-full" style="width: 90%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Diagramas, Sistema MK, Planejamento de Redes</p>
+                </div>
+
+                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-white"><i class="fab fa-aws mr-2 text-fight-red"></i> Cloud
+                            Computing</span>
+                        <span class="text-fight-red font-code">Training Camp</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2.5 relative overflow-hidden">
+                        <div class="bg-yellow-500 h-2.5 rounded-full absolute top-0 left-0 animate-pulse"
+                            style="width: 45%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">AWS RE/START (Linux, Cloud Foundation)</p>
+                </div>
+
+                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-white"><i class="fas fa-code mr-2 text-fight-red"></i> Lógica &
+                            Dev</span>
+                        <span class="text-fight-red font-code">Em Estudo</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2.5 relative overflow-hidden">
+                        <div class="bg-blue-500 h-2.5 rounded-full absolute top-0 left-0 animate-pulse"
+                            style="width: 60%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Java, Python, Estrutura de Dados</p>
+                </div>
+
+                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-white"><i class="fas fa-brain mr-2 text-fight-red"></i> Soft
+                            Skills</span>
+                        <span class="text-fight-red font-code">100%</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2.5">
+                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Disciplina, Foco, Resolução de Problemas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section id="experience" class="py-20 bg-fight-gray">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 uppercase text-white">
+                Fight History <span class="text-sm font-code text-gray-500 block mt-2 normal-case">(Experiência &
+                    Formação)</span>
+            </h2>
+
+            <div
+                class="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-fight-red before:to-transparent">
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div
+                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-fight-gray bg-fight-red shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-network-wired text-white text-sm"></i>
+                    </div>
+                    <div
+                        class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-fight-dark p-6 rounded border border-gray-800 shadow-xl card-hover">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-white text-lg">Projetista FTTH</h3>
+                            <span
+                                class="text-xs font-code text-green-500 border border-green-500 px-2 py-0.5 rounded">IBITELECOM</span>
+                        </div>
+                        <time class="block mb-3 text-sm font-normal text-gray-500">Dez. 2024 - Mar. 2025</time>
+                        <p class="text-gray-400 text-sm">Experiência com projetos de rede Fibra Óptica, diagramas e
+                            operação do Sistema MK.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div
+                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-fight-gray bg-gray-700 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-school text-white text-sm"></i>
+                    </div>
+                    <div
+                        class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-fight-dark p-6 rounded border border-gray-800 shadow-xl card-hover">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-white text-lg">ATB - Assistente Técnico</h3>
+                            <span
+                                class="text-xs font-code text-fight-red border border-fight-red px-2 py-0.5 rounded">SRE-MG</span>
+                        </div>
+                        <time class="block mb-3 text-sm font-normal text-gray-500">Out. 2023 - Presente</time>
+                        <p class="text-gray-400 text-sm">Gestão de dados e sistemas internos, atendimento e uso de
+                            ferramentas administrativas.</p>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                    <div
+                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-fight-gray bg-blue-600 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <div
+                        class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-fight-dark p-6 rounded border border-blue-900/30 shadow-xl card-hover">
+                        <h3 class="font-bold text-white text-lg mb-2">Educação & Treinamento</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-fight-red font-bold text-sm">Engenharia de Software</h4>
+                                <p class="text-gray-400 text-xs">Estácio de Sá | 2023 - Presente</p>
+                            </div>
+                            <div class="border-l-2 border-yellow-500 pl-3 py-1">
+                                <h4 class="text-yellow-500 font-bold text-sm">AWS RE/START</h4>
+                                <p class="text-gray-400 text-xs">Formação em Cloud Computing | Em andamento</p>
+                            </div>
+                            <div>
+                                <h4 class="text-white font-bold text-sm text-xs">Técnico em Administração</h4>
+                                <p class="text-gray-400 text-xs italic">UNICORP | 2023 - 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <section id="contact" class="py-20 bg-fight-dark text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-5xl font-bold uppercase mb-8 text-white">Round <span class="text-fight-red">Final</span>
+            </h2>
+             <div class="grid grid-cols-3 gap-2 md:gap-6 max-w-2xl mx-auto">
+                <a href="mailto:vytorfreitas0@gmail.com"
+                    class="bg-gray-800 hover:bg-fight-red p-6 rounded transition-all">
+                    <i class="fas fa-envelope text-2xl mb-2 text-fight-red"></i>
+                    <p class="text-white font-bold hidden lg:block">Gmail</p>
+                    <p class="text-gray-400 text-sm hidden lg:block">vytorfreitas0@gmail.com</p>
+                </a>
+                <a href="https://www.linkedin.com/in/vytor-freitas-dev" target="_blank"
+                    class="bg-gray-800 hover:bg-blue-600 p-6 rounded transition-all">
+                    <i class="fab fa-linkedin text-2xl mb-2 text-blue-500"></i>
+                    <p class="text-white font-bold hidden lg:block">Linkedin</p>
+                    <p class="text-gray-400 text-sm hidden lg:block">Vytor Freitas</p>
+                </a>
+                <a href="https://wa.me/5533984282085" target="_blank"
+                    class="bg-gray-800 hover:bg-green-600 p-6 rounded transition-all">
+                    <i class="fab fa-whatsapp text-2xl mb-2 text-green-500"></i>
+                    <p class="text-white font-bold hidden lg:block">WhatsApp</p>
+                    <p class="text-gray-400 text-sm hidden lg:block">(33) 98428-2085</p>
+                </a>
+            </div>
+            <footer class="mt-20 text-gray-600 text-xs font-code">
+                <p>&copy; 2025 Vytor Freitas | Dev & Fighter Portfólio</p>
+            </footer>
+        </div>
+    </section>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-slide-in');
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.card-hover').forEach(card => {
+                card.style.opacity = '0';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+
+</html>
