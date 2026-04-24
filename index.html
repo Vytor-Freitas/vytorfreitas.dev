@@ -1,482 +1,315 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vytor Freitas | Dev & Fighter</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vytor Freitas - Terminal Portfolio</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Oculta as barras de rolagem mas mantém a funcionalidade */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #050505; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
 
-    <!-- Google AdSense Script (Global) -->
-    <!-- SUBSTITUA 'ca-pub-SEU_ID_AQUI' PELO SEU ID DE PUBLICADOR DO ADSENSE -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-SEU_ID_AQUI"
-     crossorigin="anonymous"></script>
+    /* Efeito de brilho de terminal para textos selecionados */
+    .glow-text {
+      text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
 
-    <!-- Fonts: Oswald (Estilo Luta/Poster) e JetBrains Mono (Código) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Oswald:wght@300;500;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons: FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'fight-red': '#DC2626',
-                        'fight-dark': '#0f0f0f',
-                        'fight-gray': '#1a1a1a',
-                        'tech-accent': '#00ff41'
-                    },
-                    fontFamily: {
-                        'poster': ['Oswald', 'sans-serif'],
-                        'code': ['JetBrains Mono', 'monospace'],
-                    },
-                    animation: {
-                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'slide-in': 'slideIn 0.5s ease-out forwards',
-                    },
-                    keyframes: {
-                        slideIn: {
-                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        body {
-            background-color: #0f0f0f;
-            color: #e5e5e5;
-            overflow-x: hidden;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #DC2626;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.2);
-            border-color: #DC2626;
-        }
-
-        .rope-divider {
-            background-image: repeating-linear-gradient(45deg, #DC2626 0, #DC2626 10px, #0f0f0f 10px, #0f0f0f 20px);
-            height: 8px;
-            width: 100%;
-        }
-
-        /* Garantir alinhamento limpo nas tabelas de stats */
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 1rem;
-            border-bottom: 1px solid #374151;
-            padding-bottom: 0.5rem;
-        }
-    </style>
+    /* Estilos do Mini Teclado Interativo */
+    .key {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      font-size: 10px;
+      color: #52525b; /* gray-600 */
+      background-color: #0a0a0a;
+      border: 1px solid #1f2937; /* gray-800 */
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      cursor: crosshair;
+      user-select: none;
+    }
+    @media (min-width: 640px) {
+      .key {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+      }
+    }
+    .key:hover {
+      background-color: rgba(34, 197, 94, 0.15); /* Fundo verde translúcido */
+      color: #4ade80; /* Texto verde vibrante */
+      border-color: #22c55e; /* Borda verde */
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.6); /* Brilho neon */
+      transform: translateY(-2px); /* Efeito de tecla sendo "solta/pressionada" */
+      z-index: 10;
+    }
+  </style>
 </head>
+<body class="min-h-screen bg-[#050505] text-[#a1a1aa] font-mono selection:bg-green-500/30 selection:text-green-200 overflow-x-hidden flex flex-col">
 
-<body class="font-poster relative">
-
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-fight-dark/95 border-b border-fight-red/30 backdrop-blur">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold tracking-tighter text-white">
-                VF<span class="text-fight-red">.DEV</span>
-            </div>
-            <div class="hidden md:flex space-x-8 font-code text-sm">
-                <a href="#about" class="hover:text-fight-red transition-colors">TALE OF THE TAPE</a>
-                <a href="#skills" class="hover:text-fight-red transition-colors">STATS</a>
-                <a href="#experience" class="hover:text-fight-red transition-colors">FIGHT HISTORY</a>
-                <a href="#contact" class="hover:text-fight-red transition-colors">CONTATO</a>
-            </div>
-            <button class="md:hidden text-white hover:text-fight-red" onclick="toggleMenu()">
-                <i class="fas fa-bars text-2xl"></i>
-            </button>
+  <div class="max-w-4xl mx-auto px-4 py-12 sm:px-8 space-y-12 flex-grow w-full">
+    
+    <!-- CABEÇALHO / TERMINAL HEADER -->
+    <header class="space-y-6">
+      
+      <!-- Barra Superior do Terminal -->
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2 border-b border-gray-900 pb-4">
+        <div class="flex items-center gap-2 text-green-500 text-sm sm:text-base">
+          <i data-lucide="terminal" class="w-[18px] h-[18px]"></i>
+          <span>vytor@portfolio:~$</span>
+          <span id="cmd-text" class="text-gray-300"></span>
+          <span class="w-2.5 h-5 bg-green-500 animate-pulse ml-1"></span>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-fight-gray border-b border-fight-red/50">
-            <a href="#about" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">QUEM SOU</a>
-            <a href="#skills" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">HABILIDADES</a>
-            <a href="#experience" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">EXPERIÊNCIA</a>
-            <a href="#contact" class="block py-3 px-6 hover:bg-fight-dark" onclick="toggleMenu()">CONTATO</a>
+        <div class="text-xs text-gray-600 hidden sm:block">
+          Último login: <span id="login-date"></span>
         </div>
-    </nav>
-
-    <!-- ADSENSE LATERAL HARMÔNICO (Retrátil) -->
-    <!-- Contêiner principal com transição suave -->
-    <div id="ad-sidebar" class="fixed right-0 top-1/2 z-40 hidden 2xl:flex flex-row items-center transition-transform duration-500 ease-in-out translate-x-0" style="transform: translateY(-50%) translateX(0);">
+      </div>
+      
+      <!-- Área do Perfil (Nome à esquerda + Foto Maior à direita) -->
+      <div id="hero-section" class="opacity-0 transition-opacity duration-700 ease-in-out flex flex-col-reverse sm:flex-row justify-between items-center gap-8 pt-6">
         
-        <!-- Botão Toggle (Aba Lateral) -->
-        <button onclick="toggleAd()" class="h-24 w-8 bg-fight-dark border-y border-l border-fight-red/30 rounded-l-lg flex flex-col items-center justify-center cursor-pointer hover:bg-fight-red/10 transition-colors shadow-lg group z-50 relative">
-            <i id="ad-icon" class="fas fa-chevron-right text-fight-red text-xs transition-transform duration-300"></i>
-            <span class="text-[9px] text-gray-400 font-code uppercase tracking-widest mt-2 rotate-180 group-hover:text-white transition-colors" style="writing-mode: vertical-rl;">Ads</span>
-        </button>
-
-        <!-- Corpo do Anúncio -->
-        <div class="bg-fight-dark/90 backdrop-blur-md border-y border-l border-gray-800 p-3 shadow-2xl relative">
-            <div class="flex flex-col items-center gap-2">
-                <span class="text-[8px] text-gray-500 font-code uppercase tracking-[0.2em]">Patrocinador</span>
-                
-                <!-- Moldura Tech HUD -->
-                <div class="relative p-[2px] bg-gray-900/80 rounded border border-gray-800">
-                    <!-- Detalhes de Canto (Visual Tech) -->
-                    <div class="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-fight-red/60"></div>
-                    <div class="absolute -top-1 -right-1 w-2 h-2 border-t border-r border-fight-red/60"></div>
-                    <div class="absolute -bottom-1 -left-1 w-2 h-2 border-b border-l border-fight-red/60"></div>
-                    <div class="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-fight-red/60"></div>
-
-                    <!-- Espaço do Anúncio -->
-                    <div class="w-[160px] h-[600px] bg-black/50 flex items-center justify-center overflow-hidden relative">
-                         <span class="text-gray-700 text-xs font-code absolute z-0 opacity-50">Loading Ad...</span>
-                         
-                         <!-- Script AdSense -->
-                         <ins class="adsbygoogle relative z-10"
-                             style="display:inline-block;width:160px;height:600px"
-                             data-ad-client="ca-pub-SEU_ID_AQUI"
-                             data-ad-slot="SEU_SLOT_ID_AQUI"></ins>
-                         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                    </div>
-                </div>
+        <!-- Textos e Teclado -->
+        <div class="flex flex-col justify-center w-full sm:w-auto text-center sm:text-left">
+          
+          <!-- Mini Teclado Interativo -->
+          <div class="flex flex-col gap-1 sm:gap-1.5 mb-6 mx-auto sm:mx-0 w-fit" aria-hidden="true">
+            <!-- Linha 1 -->
+            <div class="flex gap-1 sm:gap-1.5">
+              <div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div>
             </div>
-        </div>
-    </div>
-
-    <script>
-        // Lógica simples para recolher/expandir o anúncio
-        let isAdVisible = true;
-        function toggleAd() {
-            const sidebar = document.getElementById('ad-sidebar');
-            const icon = document.getElementById('ad-icon');
-            
-            if (isAdVisible) {
-                // Esconder (Mover para a direita, deixando apenas o botão visível)
-                // O botão tem w-8 (2rem/32px). O conteúdo tem ~190px.
-                // Transladamos 100% do container menos a largura do botão
-                sidebar.style.transform = 'translateY(-50%) translateX(calc(100% - 2rem))';
-                icon.classList.add('rotate-180');
-            } else {
-                // Mostrar
-                sidebar.style.transform = 'translateY(-50%) translateX(0)';
-                icon.classList.remove('rotate-180');
-            }
-            isAdVisible = !isAdVisible;
-        }
-    </script>
-    <!-- FIM ADSENSE LATERAL -->
-
-    <!-- Hero Section -->
-    <header class="relative h-screen flex items-center justify-center overflow-hidden">
-        <div
-            class="absolute inset-0 bg-[url('https://unsplash.com/pt-br/fotografias/uma-parede-branca-com-alguns-pontos-pretos-GEc9p9avZP8')] bg-cover bg-center opacity-20">
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-fight-dark via-fight-dark/80 to-transparent"></div>
-
-        <div class="relative z-10 text-center px-4">
-            <div
-                class="mb-4 inline-block border border-fight-red px-4 py-1 rounded-full bg-fight-red/10 animate-pulse-fast">
-                <span class="text-fight-red font-code text-xs md:text-sm tracking-widest uppercase">Disponível para
-                    Projetos</span>
+            <!-- Linha 2 -->
+            <div class="flex gap-1 sm:gap-1.5 ml-3 sm:ml-4">
+              <div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div><div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div><div class="key">L</div>
             </div>
-            <h1
-                class="text-5xl md:text-8xl font-bold uppercase tracking-tighter mb-4 text-white drop-shadow-lg text-center">
-                Vytor <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-fight-red to-red-800">Freitas</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 font-light mb-8 max-w-2xl mx-auto">
-                <i class="fas fa-code text-fight-red mr-2"></i> Estudante de Engenharia de Software
-                <span class="mx-3 text-fight-red">|</span>
-                <i class="fas fa-fist-raised text-fight-red mr-2"></i> Lutador & Eng. de Software
-            </p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#contact"
-                    class="bg-fight-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded transition-all transform hover:scale-105">
-                    DESAFIAR (CONTATO)
-                </a>
-                <a href="#experience"
-                    class="border border-white hover:border-fight-red hover:text-fight-red text-white font-bold py-3 px-8 rounded transition-all">
-                    VER CURRÍCULO
-                </a>
+            <!-- Linha 3 -->
+            <div class="flex gap-1 sm:gap-1.5 ml-6 sm:ml-8">
+              <div class="key">Z</div><div class="key">X</div><div class="key">C</div><div class="key">V</div><div class="key">B</div><div class="key">N</div><div class="key">M</div><div class="key px-2 w-auto">&gt;_</div>
             </div>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-100 tracking-tight mb-2 glow-text">
+            Vytor Freitas
+          </h1>
+          <p class="text-green-400 text-sm sm:text-base">&gt; Desenvolvedor de Software</p>
         </div>
+
+        <!-- FOTO DE PERFIL COM EFEITO TERMINAL -->
+        <div class="flex-shrink-0 relative group">
+          <div class="border border-gray-800 bg-[#0a0a0a] p-2 transition-colors duration-500 group-hover:border-green-500/50">
+            <img 
+              src="Perfil.jpeg" 
+              onerror="this.src='https://placehold.co/400x400/0a0a0a/22c55e?text=Vytor+F.&font=mono'"
+              alt="Vytor Freitas" 
+              class="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+            />
+          </div>
+          <!-- Efeitos de borda no hover -->
+          <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </div>
+
+      </div>
     </header>
 
-    <div class="rope-divider"></div>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out space-y-16">
+      
+      <!-- SESSÃO DE INFO DO SISTEMA -->
+      <section class="border border-gray-800 bg-[#0a0a0a] p-6 relative">
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-green-500/40 to-transparent"></div>
+        <h2 class="text-gray-300 mb-6 font-bold">// INFORMAÇÕES_DO_USUÁRIO</h2>
+        <ul class="space-y-3 text-sm sm:text-base">
+          <li class="flex flex-col sm:flex-row"><span class="w-32 text-gray-600">Nome:</span> <span class="text-gray-300">Vytor Freitas</span></li>
+          <li class="flex flex-col sm:flex-row"><span class="w-32 text-gray-600">Baseado em:</span> <span class="text-gray-300">Brasil</span></li>
+          <li class="flex flex-col sm:flex-row"><span class="w-32 text-gray-600">Profissão:</span> <span class="text-gray-300">Desenvolvedor de Software</span></li>
+          <li class="flex flex-col sm:flex-row items-start sm:items-center">
+            <span class="w-32 text-gray-600">Status:</span> 
+            <span class="text-green-400 flex items-center gap-2 mt-1 sm:mt-0">
+              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> 
+              Disponível para novos desafios
+            </span>
+          </li>
+        </ul>
+      </section>
 
-    <!-- About Section (Tale of the Tape) -->
-    <section id="about" class="py-20 bg-fight-gray">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 uppercase text-white">
-                <span class="border-b-4 border-fight-red pb-2">Tale of the Tape</span>
-            </h2>
+      <!-- SESSÃO: SOBRE MIM -->
+      <section class="space-y-4">
+        <h2 class="text-gray-100 text-lg sm:text-xl border-b border-gray-900 pb-2">[ 01_SOBRE_MIM ]</h2>
+        <p class="leading-relaxed text-gray-400 whitespace-pre-line text-sm sm:text-base">
+Desenvolvedor focado em construir aplicações web modernas, responsivas e de alta performance. 
+Especializado em transformar problemas complexos em interfaces eficientes e de código limpo. 
+Entusiasta da cultura open-source, arquitetura escalável e design minimalista.
+        </p>
+      </section>
 
-            <div class="grid md:grid-cols-2 gap-12 items-start max-w-5xl mx-auto">
-                <!-- Profile Area -->
-                <div class="relative group">
-                    <div
-                        class="absolute -inset-1 bg-gradient-to-r from-red-600 to-fight-dark rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000">
-                    </div>
-                    <div
-                        class="relative bg-fight-dark border border-gray-800 p-8 rounded-lg text-center h-full flex flex-col justify-center items-center">
-
-                        <!-- AUMENTEI O TAMANHO AQUI: w-48 h-48 (mobile) e md:w-64 md:h-64 (desktop) -->
-                        <img class="rounded-full mb-6 w-48 h-48 md:w-64 md:h-64 object-cover border-4 border-fight-red shadow-lg shadow-red-900/20" src="Perfil.png" alt="Vytor Freitas" onerror="this.src='https://ui-avatars.com/api/?name=Vytor+Freitas&background=DC2626&color=fff&size=256'"/>
-                        <h3 class="text-2xl font-bold text-white mb-2">Vytor Hugo B. P. de Freitas</h3>
-                        <p class="text-gray-400 font-code text-sm">Governador Valadares, MG</p>
-                    </div>
-                </div>
-
-                <!-- Stats com Alinhamento Corrigido -->
-                <div class="space-y-6">
-                    <div class="stat-row">
-                        <span class="text-gray-400 font-code uppercase text-sm shrink-0">Classe</span>
-                        <span class="text-white text-lg md:text-xl font-bold text-right leading-tight">Desenvolvedor
-                            Back-End / Fullstack</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="text-gray-400 font-code uppercase text-sm shrink-0">Status</span>
-                        <span class="text-white text-lg md:text-xl font-bold text-right">AWS Cloud Trainee</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="text-gray-400 font-code uppercase text-sm shrink-0">Graduação</span>
-                        <span class="text-white text-lg md:text-xl font-bold text-right">Eng. de Software
-                            (Estácio)</span>
-                    </div>
-
-                    <div class="mt-8">
-                        <h4 class="text-fight-red font-bold mb-4 uppercase tracking-widest">Sobre o Atleta</h4>
-                        <p class="text-gray-300 leading-relaxed font-sans">
-                            Profissional proativo e autodidata, unindo a disciplina das artes marciais com a lógica da
-                            programação. Atualmente cursando Engenharia de Software e aprofundando conhecimentos em
-                            Cloud Computing através do programa AWS RE/START. Possuo experiência sólida em projetos de
-                            redes de fibra óptica (FTTH), e busco oportunidades para aplicar minha determinação e rápida
-                            capacidade de aprendizado no desenvolvimento de software.
-                        </p>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2 mt-4 font-code text-xs">
-                        <span
-                            class="px-3 py-1 bg-gray-800 text-fight-red border border-fight-red/30 rounded">#Proativo</span>
-                        <span
-                            class="px-3 py-1 bg-gray-800 text-fight-red border border-fight-red/30 rounded">#TrabalhoEmEquipe</span>
-                        <span
-                            class="px-3 py-1 bg-gray-800 text-fight-red border border-fight-red/30 rounded">#Autonomia</span>
-                    </div>
-                </div>
+      <!-- SESSÃO: PROJETOS -->
+      <section class="space-y-6">
+        <h2 class="text-gray-100 text-lg sm:text-xl border-b border-gray-900 pb-2">[ 02_PROJETOS ]</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          
+          <!-- Projeto 1: CNH Simulados -->
+          <a href="https://vytor-freitas.github.io/CNH-SIMULADOS/" target="_blank" rel="noopener noreferrer" class="block border border-gray-800 bg-[#0a0a0a] p-6 hover:border-green-500/50 transition-all duration-300 group relative cursor-pointer flex flex-col">
+            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-gray-200 font-bold group-hover:text-green-400 transition-colors flex items-center gap-2">&gt; CNH Simulados</h3>
+                <span class="text-xs text-green-500/60 font-mono">[ONLINE]</span>
+              </div>
+              <i data-lucide="external-link" class="w-[18px] h-[18px] text-gray-600 group-hover:text-green-400 transition-colors"></i>
             </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 bg-fight-dark relative">
-
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 uppercase text-white">
-                <span class="text-fight-red">///</span> Atributos de Combate
-            </h2>
-
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
-                    <div class="flex justify-between mb-2">
-                        <span class="font-bold text-white"><i class="fas fa-network-wired mr-2 text-fight-red"></i>
-                            Redes / FTTH</span>
-                        <span class="text-fight-red font-code">Exp. Profissional</span>
-                    </div>
-                    <div class="w-full bg-gray-800 rounded-full h-2.5">
-                        <div class="bg-fight-red h-2.5 rounded-full" style="width: 90%"></div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">Diagramas, Sistema MK, Planejamento de Redes</p>
-                </div>
-
-                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
-                    <div class="flex justify-between mb-2">
-                        <span class="font-bold text-white"><i class="fab fa-aws mr-2 text-fight-red"></i> Cloud
-                            Computing</span>
-                        <span class="text-fight-red font-code">Training Camp</span>
-                    </div>
-                    <div class="w-full bg-gray-800 rounded-full h-2.5 relative overflow-hidden">
-                        <div class="bg-yellow-500 h-2.5 rounded-full absolute top-0 left-0 animate-pulse"
-                            style="width: 45%"></div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">AWS RE/START (Linux, Cloud Foundation)</p>
-                </div>
-
-                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
-                    <div class="flex justify-between mb-2">
-                        <span class="font-bold text-white"><i class="fas fa-code mr-2 text-fight-red"></i> Lógica &
-                            Dev</span>
-                        <span class="text-fight-red font-code">Em Estudo</span>
-                    </div>
-                    <div class="w-full bg-gray-800 rounded-full h-2.5 relative overflow-hidden">
-                        <div class="bg-blue-500 h-2.5 rounded-full absolute top-0 left-0 animate-pulse"
-                            style="width: 60%"></div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">Java, Python, Estrutura de Dados</p>
-                </div>
-
-                <div class="bg-fight-gray p-6 rounded border border-gray-800 card-hover transition-all duration-300">
-                    <div class="flex justify-between mb-2">
-                        <span class="font-bold text-white"><i class="fas fa-brain mr-2 text-fight-red"></i> Soft
-                            Skills</span>
-                        <span class="text-fight-red font-code">100%</span>
-                    </div>
-                    <div class="w-full bg-gray-800 rounded-full h-2.5">
-                        <div class="bg-green-500 h-2.5 rounded-full" style="width: 100%"></div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">Disciplina, Foco, Resolução de Problemas</p>
-                </div>
+            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">
+              Aplicação web focada em simulados para a prova teórica da CNH. Desenvolvida para ajudar futuros motoristas a testarem os seus conhecimentos de forma interativa e prática.
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs text-gray-500 font-mono mt-auto">
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Web App</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Front-end</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Educação</span>
             </div>
-        </div>
-    </section>
+          </a>
 
-    <!-- Experience Timeline -->
-    <section id="experience" class="py-20 bg-fight-gray">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 uppercase text-white">
-                Fight History <span class="text-sm font-code text-gray-500 block mt-2 normal-case">(Experiência &
-                    Formação)</span>
-            </h2>
-
-            <div
-                class="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-fight-red before:to-transparent">
-
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                    <div
-                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-fight-gray bg-fight-red shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fas fa-network-wired text-white text-sm"></i>
-                    </div>
-                    <div
-                        class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-fight-dark p-6 rounded border border-gray-800 shadow-xl card-hover">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-white text-lg">Projetista FTTH</h3>
-                            <span
-                                class="text-xs font-code text-green-500 border border-green-500 px-2 py-0.5 rounded">IBITELECOM</span>
-                        </div>
-                        <time class="block mb-3 text-sm font-normal text-gray-500">Dez. 2024 - Mar. 2025</time>
-                        <p class="text-gray-400 text-sm">Experiência com projetos de rede Fibra Óptica, diagramas e
-                            operação do Sistema MK.</p>
-                    </div>
-                </div>
-
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                    <div
-                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-fight-gray bg-gray-700 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fas fa-school text-white text-sm"></i>
-                    </div>
-                    <div
-                        class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-fight-dark p-6 rounded border border-gray-800 shadow-xl card-hover">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-white text-lg">ATB - Assistente Técnico</h3>
-                            <span
-                                class="text-xs font-code text-fight-red border border-fight-red px-2 py-0.5 rounded">SRE-MG</span>
-                        </div>
-                        <time class="block mb-3 text-sm font-normal text-gray-500">Out. 2023 - Presente</time>
-                        <p class="text-gray-400 text-sm">Gestão de dados e sistemas internos, atendimento e uso de
-                            ferramentas administrativas.</p>
-                    </div>
-                </div>
-
-                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                    <div
-                        class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-fight-gray bg-blue-600 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                        <i class="fas fa-graduation-cap text-white text-sm"></i>
-                    </div>
-                    <div
-                        class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-fight-dark p-6 rounded border border-blue-900/30 shadow-xl card-hover">
-                        <h3 class="font-bold text-white text-lg mb-2">Educação & Treinamento</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <h4 class="text-fight-red font-bold text-sm">Engenharia de Software</h4>
-                                <p class="text-gray-400 text-xs">Estácio de Sá | 2023 - Presente</p>
-                            </div>
-                            <div class="border-l-2 border-yellow-500 pl-3 py-1">
-                                <h4 class="text-yellow-500 font-bold text-sm">AWS RE/START</h4>
-                                <p class="text-gray-400 text-xs">Formação em Cloud Computing | Em andamento</p>
-                            </div>
-                            <div>
-                                <h4 class="text-white font-bold text-sm text-xs">Técnico em Administração</h4>
-                                <p class="text-gray-400 text-xs italic">UNICORP | 2023 - 2024</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+          <!-- Projeto 2: Ambiente de Estudo -->
+          <a href="https://vytor-freitas.github.io/ambient-de-estudo/" target="_blank" rel="noopener noreferrer" class="block border border-gray-800 bg-[#0a0a0a] p-6 hover:border-green-500/50 transition-all duration-300 group relative cursor-pointer flex flex-col">
+            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-gray-200 font-bold group-hover:text-green-400 transition-colors flex items-center gap-2">&gt; Ambiente de Estudo</h3>
+                <span class="text-xs text-green-500/60 font-mono">[ONLINE]</span>
+              </div>
+              <i data-lucide="external-link" class="w-[18px] h-[18px] text-gray-600 group-hover:text-green-400 transition-colors"></i>
             </div>
-        </div>
-    </section>
-
-    <!-- Footer / Contact -->
-    <section id="contact" class="py-20 bg-fight-dark text-center">
-        <div class="container mx-auto px-4">
-            <h2 class="text-5xl font-bold uppercase mb-8 text-white">Round <span class="text-fight-red">Final</span>
-            </h2>
-             <div class="grid grid-cols-3 gap-2 md:gap-6 max-w-2xl mx-auto">
-                <a href="mailto:vytorfreitas0@gmail.com"
-                    class="bg-gray-800 hover:bg-fight-red p-6 rounded transition-all">
-                    <i class="fas fa-envelope text-2xl mb-2 text-fight-red"></i>
-                    <p class="text-white font-bold hidden lg:block">Gmail</p>
-                    <p class="text-gray-400 text-sm hidden lg:block">vytorfreitas0@gmail.com</p>
-                </a>
-                <a href="https://www.linkedin.com/in/vytor-freitas-dev" target="_blank"
-                    class="bg-gray-800 hover:bg-blue-600 p-6 rounded transition-all">
-                    <i class="fab fa-linkedin text-2xl mb-2 text-blue-500"></i>
-                    <p class="text-white font-bold hidden lg:block">Linkedin</p>
-                    <p class="text-gray-400 text-sm hidden lg:block">Vytor Freitas</p>
-                </a>
-                <a href="https://wa.me/5533984282085" target="_blank"
-                    class="bg-gray-800 hover:bg-green-600 p-6 rounded transition-all">
-                    <i class="fab fa-whatsapp text-2xl mb-2 text-green-500"></i>
-                    <p class="text-white font-bold hidden lg:block">WhatsApp</p>
-                    <p class="text-gray-400 text-sm hidden lg:block">(33) 98428-2085</p>
-                </a>
+            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">
+              Plataforma projetada para otimizar a rotina de estudos. Interface focada em produtividade, organização de tarefas e melhoria na concentração do utilizador.
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs text-gray-500 font-mono mt-auto">
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">UI/UX</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Produtividade</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">JavaScript</span>
             </div>
-            <footer class="mt-20 text-gray-600 text-xs font-code">
-                <p>&copy; 2025 Vytor Freitas | Dev & Fighter Portfólio</p>
-            </footer>
+          </a>
+
+          <!-- Projeto 3: Mojo Code -->
+          <a href="https://www.instagram.com/mojodojocode/" target="_blank" rel="noopener noreferrer" class="block border border-gray-800 bg-[#0a0a0a] p-6 hover:border-yellow-500/50 transition-all duration-300 group relative cursor-pointer flex flex-col">
+            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-yellow-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex flex-col gap-1">
+                <h3 class="text-gray-200 font-bold group-hover:text-yellow-400 transition-colors flex items-center gap-2">&gt; Mojo Code</h3>
+                <span class="text-xs text-yellow-500/80 font-mono animate-pulse">[EM DESENVOLVIMENTO]</span>
+              </div>
+              <i data-lucide="external-link" class="w-[18px] h-[18px] text-gray-600 group-hover:text-yellow-400 transition-colors"></i>
+            </div>
+            <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">
+              Software House em fase de planeamento e desenvolvimento. O projeto visa a criação de soluções digitais inovadoras, aplicações web de alta performance e automação de negócios.
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs text-gray-500 font-mono mt-auto">
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Empreendedorismo</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Software House</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Business</span>
+            </div>
+          </a>
+
         </div>
-    </section>
+      </section>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
+      <!-- SESSÃO: HABILIDADES / DEPENDÊNCIAS -->
+      <section class="space-y-6">
+        <h2 class="text-gray-100 text-lg sm:text-xl border-b border-gray-900 pb-2">[ 03_DEPENDÊNCIAS_SISTEMA ]</h2>
+        <div class="bg-[#0a0a0a] border border-gray-800 p-6 overflow-x-auto">
+          <pre class="text-gray-400 text-sm leading-relaxed">
+root/
+├── FRONT-END/
+│   ├── JavaScript & TypeScript
+│   ├── React.js / Next.js
+│   ├── Tailwind CSS
+│   └── HTML5 / CSS3
+├── BACK-END/
+│   ├── Node.js / Express
+│   ├── APIs RESTful
+│   └── Bancos de Dados (SQL / NoSQL)
+└── FERRAMENTAS/
+    ├── Git / GitHub
+    ├── Docker
+    ├── Jest (Testes)
+    └── Figma
+          </pre>
+        </div>
+      </section>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-slide-in');
-                        entry.target.style.opacity = '1';
-                    }
-                });
-            }, { threshold: 0.1 });
+      <!-- SESSÃO: CONTATO -->
+      <section class="space-y-6">
+        <h2 class="text-gray-100 text-lg sm:text-xl border-b border-gray-900 pb-2">[ 04_CONEXÃO_REDE ]</h2>
+        <ul class="space-y-4 text-sm sm:text-base font-mono">
+          <li>
+            <a href="mailto:vytorfreitas0@gmail.com" class="flex items-center gap-4 group w-fit">
+              <span class="text-gray-700 group-hover:text-green-500 transition-colors">-&gt;</span>
+              <span class="text-gray-500 w-24 group-hover:text-gray-300 transition-colors">Email:</span>
+              <span class="text-green-400/80 group-hover:text-green-400 border-b border-green-500/0 group-hover:border-green-500/50 transition-all">
+                vytorfreitas0@gmail.com
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="https://linkedin.com/in/vytor-freitas-dev" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 group w-fit">
+              <span class="text-gray-700 group-hover:text-green-500 transition-colors">-&gt;</span>
+              <span class="text-gray-500 w-24 group-hover:text-gray-300 transition-colors">LinkedIn:</span>
+              <span class="text-gray-400 group-hover:text-white border-b border-gray-500/0 group-hover:border-gray-500/50 transition-all">
+                linkedin.com/in/vytor-freitas-dev
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/vytor-freitas" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 group w-fit">
+              <span class="text-gray-700 group-hover:text-green-500 transition-colors">-&gt;</span>
+              <span class="text-gray-500 w-24 group-hover:text-gray-300 transition-colors">GitHub:</span>
+              <span class="text-gray-400 group-hover:text-white border-b border-gray-500/0 group-hover:border-gray-500/50 transition-all">
+                github.com/vytorfreitas
+              </span>
+            </a>
+          </li>
+        </ul>
+      </section>
 
-            document.querySelectorAll('.card-hover').forEach(card => {
-                card.style.opacity = '0';
-                observer.observe(card);
-            });
-        });
-    </script>
+      <!-- RODAPÉ -->
+      <footer class="text-center text-xs text-gray-700 pt-16 pb-8 border-t border-gray-900 mt-16">
+        <p>vytor.freitas © <span id="current-year"></span> - Todos os direitos reservados.</p>
+        <p class="mt-2 text-gray-800">Processo finalizado com status 0.</p>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // Inicializar ícones Lucide
+    lucide.createIcons();
+
+    // Data de login formatada
+    document.getElementById('login-date').innerText = new Date().toLocaleDateString('pt-BR');
+    
+    // Ano atual no footer
+    document.getElementById('current-year').innerText = new Date().getFullYear();
+
+    // Efeito de animação do terminal simulando boot
+    setTimeout(() => {
+      document.getElementById('cmd-text').classList.remove('opacity-0');
+    }, 400);
+
+    setTimeout(() => {
+      document.getElementById('hero-section').classList.remove('opacity-0');
+      document.getElementById('main-content').classList.remove('opacity-0');
+    }, 800);
+  </script>
 </body>
-
 </html>
