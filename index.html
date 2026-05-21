@@ -54,6 +54,47 @@
       transform: translateY(-2px); /* Efeito de tecla sendo "solta/pressionada" */
       z-index: 10;
     }
+
+    /* Estilos do Jogo Termo (Termo Dev) */
+    .termo-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #a1a1aa;
+      background-color: #0a0a0a;
+      border: 1px solid #1f2937;
+      border-radius: 4px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+    @media (min-width: 640px) {
+      .termo-cell { width: 32px; height: 32px; font-size: 18px; }
+    }
+    .termo-correct {
+      background-color: #22c55e !important;
+      color: #050505 !important;
+      border-color: #22c55e !important;
+      text-shadow: none;
+    }
+    .termo-present {
+      background-color: #eab308 !important;
+      color: #050505 !important;
+      border-color: #eab308 !important;
+      text-shadow: none;
+    }
+    .termo-absent {
+      background-color: #1f2937 !important;
+      color: #52525b !important;
+      border-color: #1f2937 !important;
+      text-shadow: none;
+    }
+    .key.termo-correct:hover { background-color: #4ade80 !important; color: #050505 !important; }
+    .key.termo-present:hover { background-color: #facc15 !important; color: #050505 !important; }
+    .key.termo-absent:hover { background-color: #374151 !important; color: #a1a1aa !important; border-color: #374151 !important; box-shadow: none; }
   </style>
 </head>
 <body class="min-h-screen bg-[#050505] text-[#a1a1aa] font-mono selection:bg-green-500/30 selection:text-green-200 overflow-x-hidden flex flex-col">
@@ -82,19 +123,31 @@
         <!-- Textos e Teclado -->
         <div class="flex flex-col justify-center w-full sm:w-auto text-center sm:text-left">
           
-          <!-- Mini Teclado Interativo -->
-          <div class="flex flex-col gap-1 sm:gap-1.5 mb-6 mx-auto sm:mx-0 w-fit" aria-hidden="true">
-            <!-- Linha 1 -->
-            <div class="flex gap-1 sm:gap-1.5">
-              <div class="key">Q</div><div class="key">W</div><div class="key">E</div><div class="key">R</div><div class="key">T</div><div class="key">Y</div><div class="key">U</div><div class="key">I</div><div class="key">O</div><div class="key">P</div>
+          <!-- Área do Jogo Termo (Termo Dev) -->
+          <div class="flex flex-col gap-1 mb-6 mx-auto sm:mx-0 w-fit items-center" id="termo-game-container">
+            <div class="text-xs text-green-500/80 mb-2 flex items-center justify-between w-full px-1">
+              <span>./termo_diario.sh</span>
+              <span id="termo-notification" class="text-yellow-400 opacity-0 transition-opacity ml-4 font-bold"></span>
             </div>
-            <!-- Linha 2 -->
-            <div class="flex gap-1 sm:gap-1.5 ml-3 sm:ml-4">
-              <div class="key">A</div><div class="key">S</div><div class="key">D</div><div class="key">F</div><div class="key">G</div><div class="key">H</div><div class="key">J</div><div class="key">K</div><div class="key">L</div>
+            
+            <div id="termo-grid" class="flex flex-col items-center gap-1 mb-2">
+              <!-- JS vai injetar o grid 6x5 aqui -->
             </div>
-            <!-- Linha 3 -->
-            <div class="flex gap-1 sm:gap-1.5 ml-6 sm:ml-8">
-              <div class="key">Z</div><div class="key">X</div><div class="key">C</div><div class="key">V</div><div class="key">B</div><div class="key">N</div><div class="key">M</div><div class="key px-2 w-auto">&gt;_</div>
+
+            <!-- Mini Teclado Interativo (Agora com data-key para leitura via JS) -->
+            <div class="flex flex-col items-center gap-1 sm:gap-1.5 w-fit" id="termo-keyboard" aria-hidden="true">
+              <!-- Linha 1 -->
+              <div class="flex gap-1 sm:gap-1.5">
+                <div class="key" data-key="Q">Q</div><div class="key" data-key="W">W</div><div class="key" data-key="E">E</div><div class="key" data-key="R">R</div><div class="key" data-key="T">T</div><div class="key" data-key="Y">Y</div><div class="key" data-key="U">U</div><div class="key" data-key="I">I</div><div class="key" data-key="O">O</div><div class="key" data-key="P">P</div>
+              </div>
+              <!-- Linha 2 -->
+              <div class="flex gap-1 sm:gap-1.5 ml-3 sm:ml-4">
+                <div class="key" data-key="A">A</div><div class="key" data-key="S">S</div><div class="key" data-key="D">D</div><div class="key" data-key="F">F</div><div class="key" data-key="G">G</div><div class="key" data-key="H">H</div><div class="key" data-key="J">J</div><div class="key" data-key="K">K</div><div class="key" data-key="L">L</div>
+              </div>
+              <!-- Linha 3 -->
+              <div class="flex gap-1 sm:gap-1.5 ml-6 sm:ml-8">
+                <div class="key px-2 w-auto" data-key="ENTER" title="Enviar">&gt;_</div><div class="key" data-key="Z">Z</div><div class="key" data-key="X">X</div><div class="key" data-key="C">C</div><div class="key" data-key="V">V</div><div class="key" data-key="B">B</div><div class="key" data-key="N">N</div><div class="key" data-key="M">M</div><div class="key px-2 w-auto" data-key="BACKSPACE" title="Apagar">⌫</div>
+              </div>
             </div>
           </div>
 
@@ -121,7 +174,6 @@
 
       </div>
     </header>
-
     <!-- CONTEÚDO PRINCIPAL -->
     <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out space-y-16">
       
@@ -151,6 +203,97 @@ Desenvolvedor focado em construir aplicações web modernas, responsivas e de al
 Especializado em transformar problemas complexos em interfaces eficientes e de código limpo. 
 Entusiasta da cultura open-source, arquitetura escalável e design minimalista.
         </p>
+      </section>
+<!-- SESSÃO: EXPERIÊNCIA PROFISSIONAL -->
+      <section class="space-y-6">
+        <h2 class="text-gray-100 text-lg sm:text-xl border-b border-gray-900 pb-2">[ 02_HISTÓRICO_PROFISSIONAL ]</h2>
+        
+        <div class="space-y-8 pl-2 sm:pl-4 border-l border-gray-800 ml-2">
+          
+          <!-- Item 1: SEPLAG -->
+          <div class="relative group">
+            <!-- Ponto na linha do tempo -->
+            <div class="absolute -left-[13px] sm:-left-[21px] top-1.5 w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+            
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1">
+              <h3 class="text-gray-200 font-bold group-hover:text-green-400 transition-colors">&gt; Assistente administrativo de Educação Básica</h3>
+              <span class="text-xs text-green-500/80 font-mono mt-1 sm:mt-0 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">[ mar/2025 - Atual ]</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-3">SEPLAG de MG <span class="text-gray-700 mx-1">|</span> Temporário <span class="text-gray-700 mx-1">|</span> Minas Gerais</p>
+            
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+              Documentação de alunos, atendimento ao publico e organização de arquivos, 
+              Foco total na burocracia escolar, sem atuação na regência de classes ou docência.
+            </p>
+            
+            <div class="flex flex-wrap gap-2 text-xs text-gray-500 font-mono">
+              
+            </div>
+          </div>
+
+          <!-- Item 2: Ibitelecom -->
+          <div class="relative group">
+            <!-- Ponto na linha do tempo inativo -->
+            <div class="absolute -left-[13px] sm:-left-[21px] top-1.5 w-2 h-2 bg-gray-700 rounded-full group-hover:bg-gray-500 transition-colors"></div>
+            
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1">
+              <h3 class="text-gray-300 font-bold group-hover:text-gray-100 transition-colors">&gt; Projetista FTTH</h3>
+              <span class="text-xs text-gray-600 font-mono mt-1 sm:mt-0">[ dez/2024 - mar/2025 ]</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-3">Ibitelecom (Ibi) <span class="text-gray-700 mx-1">|</span> Tempo integral <span class="text-gray-700 mx-1">|</span> Híbrido</p>
+            
+            <p class="text-gray-400 text-sm leading-relaxed">
+              Responsável pela elaboração de projetos de rede de fibra óptica (FTTH), criação de diagramas técnicos e operação do sistema MK. Atuação direta no planejamento de infraestrutura de redes.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SESSÃO: FORMAÇÃO ACADÊMICA -->
+      <section class="space-y-6">
+        <h2 class="text-gray-100 text-lg sm:text-xl border-b border-gray-900 pb-2">[ 03_FORMAÇÃO_ACADÊMICA ]</h2>
+        
+        <div class="grid sm:grid-cols-2 gap-4">
+          
+          <!-- Curso 1: Estácio -->
+          <div class="block border border-gray-800 bg-[#0a0a0a] p-6 hover:border-green-500/50 transition-all duration-300 group relative flex flex-col">
+            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-gray-200 font-bold group-hover:text-green-400 transition-colors">&gt; Engenharia de Software</h3>
+            </div>
+            <p class="text-gray-400 text-sm mb-1">Estácio</p>
+            <p class="text-xs text-gray-600 font-mono mb-4">[ jul/2023 - jul/2027 ]</p>
+            
+            <div class="flex flex-wrap gap-2 text-xs text-gray-500 font-mono mt-auto pt-4 border-t border-gray-900">
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Dev. de software</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Dev. web</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Python</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">JavaScript</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">HTML</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">CSS</span>
+            </div>
+          </div>
+
+          <!-- Curso 2: AWS -->
+          <div class="block border border-gray-800 bg-[#0a0a0a] p-6 hover:border-green-500/50 transition-all duration-300 group relative flex flex-col">
+            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-gray-200 font-bold group-hover:text-green-400 transition-colors">&gt; AWS RE/START Graduate</h3>
+            </div>
+            <p class="text-gray-400 text-sm mb-1">Amazon Web Services (AWS)</p>
+            <p class="text-xs text-gray-600 font-mono mb-4">[ nov/2025 - fev/2026 ]</p>
+            <div class="flex flex-wrap gap-2 text-xs text-gray-500 font-mono mt-auto pt-4 border-t border-gray-900">
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">AWS</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Data Analysis</span>
+              <span class="bg-[#111] px-2 py-1 border border-gray-800">Machine Learning</span>
+          </div>
+
+        </div>
       </section>
 
       <!-- SESSÃO: PROJETOS -->
@@ -284,7 +427,7 @@ root/
 
       <!-- RODAPÉ -->
       <footer class="text-center text-xs text-gray-700 pt-16 pb-8 border-t border-gray-900 mt-16">
-        <p>vytor.freitas © <span id="current-year"></span> - Todos os direitos reservados.</p>
+        <p>vytorfreitas.dev © <span id="current-year"></span> - Todos os direitos reservados.</p>
         <p class="mt-2 text-gray-800">Processo finalizado com status 0.</p>
       </footer>
 
@@ -310,6 +453,215 @@ root/
       document.getElementById('hero-section').classList.remove('opacity-0');
       document.getElementById('main-content').classList.remove('opacity-0');
     }, 800);
+ // --- LÓGICA DO MINIGAME "TERMO DEV" ---
+    const termoGame = (() => {
+      // Banco de palavras focadas no universo da tecnologia (Todas com exatas 5 letras)
+      const WORDS = ["CODAR", "LINUX", "VETOR", "DADOS", "TELAS", "NUVEM", "CICLO", "FONTE", "MOUSE", "TECLA", "PLACA", "TESTE", "FALHA", "LOGIN", "SENHA", "CHAVE", "TOKEN", "AUDIO", "VIDEO", "REDES", "TEXTO", "DEBUG", "BUILD", "SHELL", "MACRO", "FIBRA", "DISCO", "BYTES", "TERMO", "VIRUS", "LOCAL", "CLOUD", "SITES", "HOSTS", "BUSCA", "BUGAR", "START", "RESET", "PASTA", "CABOS"];
+      
+      const getDailyWord = () => {
+        const startDate = new Date('2024-01-01T00:00:00').valueOf();
+        const today = new Date().setHours(0,0,0,0);
+        const diffDays = Math.floor((today - startDate) / 86400000);
+        return WORDS[diffDays % WORDS.length];
+      };
+
+      const dailyWord = getDailyWord();
+      let currentGuess = "";
+      let guesses = [];
+      let gameStatus = "IN_PROGRESS"; // IN_PROGRESS, WON, LOST
+
+      const gridElement = document.getElementById('termo-grid');
+      const notificationElement = document.getElementById('termo-notification');
+
+      // Inicializa o Grid 6x5
+      const initGrid = () => {
+        gridElement.innerHTML = '';
+        for (let r = 0; r < 6; r++) {
+          const row = document.createElement('div');
+          row.className = 'flex gap-1';
+          for (let c = 0; c < 5; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'termo-cell';
+            cell.id = `cell-${r}-${c}`;
+            row.appendChild(cell);
+          }
+          gridElement.appendChild(row);
+        }
+      };
+
+      const showNotification = (msg, isError = false) => {
+        notificationElement.textContent = msg;
+        notificationElement.className = `ml-4 font-bold transition-opacity duration-300 ${isError ? 'text-red-400' : 'text-green-400'}`;
+        notificationElement.classList.remove('opacity-0');
+        if (gameStatus === "IN_PROGRESS") {
+          setTimeout(() => notificationElement.classList.add('opacity-0'), 2500);
+        }
+      };
+
+      const saveState = () => {
+        const todayStr = new Date().toLocaleDateString('pt-BR');
+        localStorage.setItem('termo_portfolio_state', JSON.stringify({ date: todayStr, guesses, status: gameStatus }));
+      };
+
+      const loadState = () => {
+        const todayStr = new Date().toLocaleDateString('pt-BR');
+        const saved = JSON.parse(localStorage.getItem('termo_portfolio_state'));
+        if (saved && saved.date === todayStr) {
+          guesses = saved.guesses || [];
+          gameStatus = saved.status || "IN_PROGRESS";
+        } else {
+          guesses = [];
+          gameStatus = "IN_PROGRESS";
+          localStorage.removeItem('termo_portfolio_state');
+        }
+      };
+
+      const checkWord = (guess, target) => {
+        const result = Array(5).fill('absent');
+        const targetArr = target.split('');
+        
+        // Verifica as letras corretas (Verde)
+        for(let i=0; i<5; i++) {
+          if(guess[i] === target[i]) {
+            result[i] = 'correct';
+            targetArr[i] = null;
+          }
+        }
+        // Verifica as presentes fora de posição (Amarelo)
+        for(let i=0; i<5; i++) {
+          if(result[i] !== 'correct' && targetArr.includes(guess[i])) {
+            result[i] = 'present';
+            targetArr[targetArr.indexOf(guess[i])] = null;
+          }
+        }
+        return result;
+      };
+
+      const updateGrid = () => {
+        // Renderiza palpites passados
+        guesses.forEach((guess, r) => {
+          const result = checkWord(guess, dailyWord);
+          for(let c=0; c<5; c++) {
+            const cell = document.getElementById(`cell-${r}-${c}`);
+            cell.textContent = guess[c];
+            cell.className = `termo-cell termo-${result[c]}`;
+          }
+        });
+
+        // Renderiza linha do palpite atual
+        if (guesses.length < 6 && gameStatus === "IN_PROGRESS") {
+          const r = guesses.length;
+          for(let c=0; c<5; c++) {
+            const cell = document.getElementById(`cell-${r}-${c}`);
+            cell.textContent = currentGuess[c] || "";
+            cell.className = 'termo-cell';
+            
+            // Efeito visual que indica onde será digitada a próxima letra
+            if (c === currentGuess.length) {
+                cell.style.borderColor = '#4ade80';
+            } else {
+                cell.style.borderColor = '';
+            }
+          }
+        }
+      };
+
+      const updateKeyboardColors = () => {
+        guesses.forEach(guess => {
+          const result = checkWord(guess, dailyWord);
+          for(let i=0; i<5; i++) {
+            const letter = guess[i];
+            const keyEl = document.querySelector(`.key[data-key="${letter}"]`);
+            if (keyEl) {
+              if (result[i] === 'correct') {
+                keyEl.classList.remove('termo-present', 'termo-absent');
+                keyEl.classList.add('termo-correct');
+              } else if (result[i] === 'present' && !keyEl.classList.contains('termo-correct')) {
+                keyEl.classList.remove('termo-absent');
+                keyEl.classList.add('termo-present');
+              } else if (result[i] === 'absent' && !keyEl.classList.contains('termo-correct') && !keyEl.classList.contains('termo-present')) {
+                keyEl.classList.add('termo-absent');
+              }
+            }
+          }
+        });
+      };
+
+      const submitGuess = () => {
+        if (currentGuess.length !== 5) {
+          showNotification("A palavra precisa ter 5 letras!", true);
+          return;
+        }
+        
+        guesses.push(currentGuess);
+        
+        if (currentGuess === dailyWord) {
+          gameStatus = "WON";
+          showNotification("[ ACESSO LIBERADO ] Palavra correta!");
+        } else if (guesses.length === 6) {
+          gameStatus = "LOST";
+          showNotification(`[ ACESSO NEGADO ] A palavra era ${dailyWord}`, true);
+        }
+
+        currentGuess = "";
+        saveState();
+        updateGrid();
+        updateKeyboardColors();
+      };
+
+      const handleInput = (key) => {
+        if (gameStatus !== "IN_PROGRESS") return;
+
+        if (key === 'ENTER') {
+          submitGuess();
+        } else if (key === 'BACKSPACE') {
+          currentGuess = currentGuess.slice(0, -1);
+          updateGrid();
+        } else if (/^[A-Z]$/.test(key)) {
+          if (currentGuess.length < 5) {
+            currentGuess += key;
+            updateGrid();
+          }
+        }
+      };
+
+      // Mapeamento de cliques físicos no miniteclado da tela
+      document.querySelectorAll('.key').forEach(keyEl => {
+        keyEl.addEventListener('click', (e) => {
+          const key = e.currentTarget.getAttribute('data-key');
+          if (key) {
+            handleInput(key);
+            e.currentTarget.style.transform = 'translateY(2px)';
+            setTimeout(() => e.currentTarget.style.transform = '', 100);
+          }
+        });
+      });
+
+      // Mapeamento de digitação livre via teclado do usuário
+      window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        
+        const key = e.key.toUpperCase();
+        if (key === 'ENTER' || key === 'BACKSPACE') {
+          e.preventDefault();
+          handleInput(key);
+        } else if (/^[A-Z]$/.test(key)) {
+          handleInput(key);
+        }
+      });
+
+      // Roda a inicialização e carrega se já houve progresso salvo hoje
+      initGrid();
+      loadState();
+      updateGrid();
+      updateKeyboardColors();
+      
+      if (gameStatus === "WON") {
+          showNotification("[ ACESSO LIBERADO ] Palavra resolvida.");
+      } else if (gameStatus === "LOST") {
+          showNotification(`[ ACESSO NEGADO ] A palavra era ${dailyWord}`, true);
+      }
+    })();
   </script>
 </body>
 </html>
